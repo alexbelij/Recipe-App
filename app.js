@@ -1,46 +1,46 @@
 $(document).ready(function () {
 
-    // GLOBAL SCOPE VARIBLES -----------------------
+  // GLOBAL SCOPE VARIBLES -----------------------
 
 
-    var apiKeySpoonacular = "c9fe105f079040448d102d03d9a54c78";
-    var favoriteRecipes = [];
-    var cart = JSON.parse(window.localStorage.getItem("myCart")) || [];
-    var myRecipes = JSON.parse(window.localStorage.getItem("myRecipes")) || [];
-    var nbRecipesCart = (window.localStorage.getItem("sizeCart")) || 0;
+  var apiKeySpoonacular = "c9fe105f079040448d102d03d9a54c78";
+  var favoriteRecipes = [];
+  var cart = JSON.parse(window.localStorage.getItem("myCart")) || [];
+  var myRecipes = JSON.parse(window.localStorage.getItem("myRecipes")) || [];
+  var nbRecipesCart = (window.localStorage.getItem("sizeCart")) || 0;
 
 
-    var ingredientsAPI = [];
+  var ingredientsAPI = [];
 
-    // INIT FUNCTIONS ------------------------------
+  // INIT FUNCTIONS ------------------------------
 
-    // Hide alert on all pages
-    $("#alert").hide();
-    // Hide save button on Create_recipes.html
-    $("#saveLocalStorage").hide()
+  // Hide alert on all pages
+  $("#alert").hide();
+  // Hide save button on Create_recipes.html
+  $("#saveLocalStorage").hide()
 
-    //Hide Original Home Search Bar
-    hideHomeSearchBar();
+  //Hide Original Home Search Bar
+  hideHomeSearchBar();
 
-    // Function to load on cart.html
+  // Function to load on cart.html
 
-    if (location.href.endsWith("Cart.html")) {
-        var displayCart = [] || 0;
+  if (location.href.endsWith("Cart.html")) {
+    var displayCart = [] || 0;
 
 
-        if (nbRecipesCart === 0) {
-            $("thead").hide()
-            $("#toremove").append("<h5>You have zero item in cart. Why don't you create recipes, and add some elements to the cart ?</h5>")
-        } else {
-            for (var i = 0; i < cart.length; i++) {
-                // Print text to show the number of recipes
-                displayCart[i] = cart[i].split("#");
-                var indexDisplayCart = displayCart[i];
+    if (nbRecipesCart === 0) {
+      $("thead").hide()
+      $("#toremove").append("<h5>You have zero item in cart. Why don't you create recipes, and add some elements to the cart ?</h5>")
+    } else {
+      for (var i = 0; i < cart.length; i++) {
+        // Print text to show the number of recipes
+        displayCart[i] = cart[i].split("#");
+        var indexDisplayCart = displayCart[i];
 
-                $("#recipeAmount").text(`You have ${nbRecipesCart} recipe(s) in your cart`)
+        $("#recipeAmount").text(`You have ${nbRecipesCart} recipe(s) in your cart`)
 
-                $("#table")
-                    .append(`
+        $("#table")
+          .append(`
               <tr>
                 <th data-id="${i}" scope="col">${indexDisplayCart[1]} ${indexDisplayCart[2]}</th>
                 <th data-id="${i}" scope="col">${indexDisplayCart[0]}</th>
@@ -50,17 +50,17 @@ $(document).ready(function () {
                 </div></th>
               </tr>
               `);
-            }
-        }
-
+      }
     }
 
-    // Function to load on My_recipes page
+  }
 
-    if (location.href.endsWith("My_Recipes.html")) {
-        for (var i = 0; i < myRecipes.length; i++) {
-            $("#displayMyrecipes")
-                .prepend(`<div id="recipeCard${i}" class="card m-3" style="width: 18rem;" >
+  // Function to load on My_recipes page
+
+  if (location.href.endsWith("My_Recipes.html")) {
+    for (var i = 0; i < myRecipes.length; i++) {
+      $("#displayMyrecipes")
+        .prepend(`<div id="recipeCard${i}" class="card m-3" style="width: 18rem;" >
   <div class="card-body">
      
       <button type="button" id="deleteButton" class="btn btn-danger btn-circle btn-sm" data-id=${i}>Delete</button>
@@ -74,14 +74,13 @@ $(document).ready(function () {
       <ol id="renderInstructions" class="card-text"></ol>
        </div>
 </div>`);
-            renderInstructions(myRecipes[i].inst);
-            renderIngredients(myRecipes[i].ing);
-        }
+      renderInstructions(myRecipes[i].inst);
+      renderIngredients(myRecipes[i].ing);
     }
+  }
 
 
 
-<<<<<<< HEAD
   var doc = new jsPDF();
   var specialElementHandlers = {
     '.container': function (element, renderer) {
@@ -96,235 +95,233 @@ $(document).ready(function () {
     });
     doc.save(`my-cart${moment()}.pdf`);
   });
-=======
-    //working on edit button
-    // <button type="button" class="btn btn-primary btn-circle btn-sm" data-id=${i} >Edit</button>
->>>>>>> 190b39cebdb273d00431f6e104823e4a7d3f67db
+  //working on edit button
+  // <button type="button" class="btn btn-primary btn-circle btn-sm" data-id=${i} >Edit</button>
 
 
 
 
-    // ON CLICK BUTTONS ---------------------------
+  // ON CLICK BUTTONS ---------------------------
 
-    // BUTTON TO GET PDF FILE
+  // BUTTON TO GET PDF FILE
 
-    var doc = new jsPDF();
-    var specialElementHandlers = {
-        '.container': function (element, renderer) {
-            return true;
-        }
-    };
+  var doc = new jsPDF();
+  var specialElementHandlers = {
+    '.container': function (element, renderer) {
+      return true;
+    }
+  };
 
-    $('#pdf').click(function () {
-        doc.fromHTML($('#table').html(), 30, 30, {
-            'width': 700,
-            'elementHandlers': specialElementHandlers
-        });
-        doc.save(`my-cart${moment()}.pdf`);
+  $('#pdf').click(function () {
+    doc.fromHTML($('#table').html(), 30, 30, {
+      'width': 700,
+      'elementHandlers': specialElementHandlers
     });
+    doc.save(`my-cart${moment()}.pdf`);
+  });
 
-    // BUTTON TO CLEAR CART CONTENT
+  // BUTTON TO CLEAR CART CONTENT
 
-    $("#clearCart").on("click", function () {
-        cart = [];
-        nbRecipesCart = 0;
-        window.localStorage.setItem("sizeCart", 0);
-        window.localStorage.setItem("myCart", JSON.stringify(cart));
-        $("#recipeAmount").text(`You have 0 recipe(s) in your cart`)
-        $("#table").html("")
-    })
+  $("#clearCart").on("click", function () {
+    cart = [];
+    nbRecipesCart = 0;
+    window.localStorage.setItem("sizeCart", 0);
+    window.localStorage.setItem("myCart", JSON.stringify(cart));
+    $("#recipeAmount").text(`You have 0 recipe(s) in your cart`)
+    $("#table").html("")
+  })
 
-    // BUTTON TO DELETE RECIPE on my_recipes.html
+  // BUTTON TO DELETE RECIPE on my_recipes.html
 
-    $(document).on("click", "#deleteButton", function () {
-        var deleteId = $(this).attr("data-id");
-        myRecipes.splice(deleteId, 1);
-        $(`#recipeCard${deleteId}`).remove();
-        window.localStorage.setItem("myRecipes", JSON.stringify(myRecipes));
+  $(document).on("click", "#deleteButton", function () {
+    var deleteId = $(this).attr("data-id");
+    myRecipes.splice(deleteId, 1);
+    $(`#recipeCard${deleteId}`).remove();
+    window.localStorage.setItem("myRecipes", JSON.stringify(myRecipes));
+  });
+
+
+
+
+  // BUTTON TO SEARCH RECIPES on index.html
+
+  $("#userSubmit").on("click", function (e) {
+    showHomeSearchBar();
+    e.preventDefault();
+    $("#displayRecipe").html("");
+    $("header").hide();
+    var query = $("#userInput").val();
+
+    $.ajax({
+      url: `https://api.spoonacular.com/recipes/search?apiKey=${apiKeySpoonacular}&query=${query}&number=9`,
+      type: "GET",
+      dataType: "json",
+    }).then(function (response) {
+
+      for (let i = 0; i < response.results.length; i++) {
+        var recipeName = response.results[i].title;
+        var recipePicture = response.results[i].image;
+        var cookTime = response.results[i].readyInMinutes;
+        var ingredientsId = response.results[i].id;
+        var servings = response.results[i].servings;
+
+        displayRecipe(
+          recipePicture,
+          recipeName,
+          cookTime,
+          servings,
+          ingredientsId
+        );
+      }
     });
+    var query = $("#userInput").val("");
+  });
 
+  // BUTTON TO OPEN RECIPE INSTRUCTION IN NEW PAGE on index.html
 
+  $(document).on("click", "#link", function () {
+    var recipeId = parseInt($(this).attr("data-id"));
 
-
-    // BUTTON TO SEARCH RECIPES on index.html
-
-    $("#userSubmit").on("click", function (e) {
-        showHomeSearchBar();
-        e.preventDefault();
-        $("#displayRecipe").html("");
-        $("header").hide();
-        var query = $("#userInput").val();
-
-        $.ajax({
-            url: `https://api.spoonacular.com/recipes/search?apiKey=${apiKeySpoonacular}&query=${query}&number=9`,
-            type: "GET",
-            dataType: "json",
-        }).then(function (response) {
-
-            for (let i = 0; i < response.results.length; i++) {
-                var recipeName = response.results[i].title;
-                var recipePicture = response.results[i].image;
-                var cookTime = response.results[i].readyInMinutes;
-                var ingredientsId = response.results[i].id;
-                var servings = response.results[i].servings;
-
-                displayRecipe(
-                    recipePicture,
-                    recipeName,
-                    cookTime,
-                    servings,
-                    ingredientsId
-                );
-            }
-        });
-        var query = $("#userInput").val("");
+    $.ajax({
+      url: `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKeySpoonacular}&includeNutrition=false`,
+      type: "GET",
+      dataType: "json",
+    }).then(function (response) {
+      var recipeUrl = response.sourceUrl;
+      window.open(recipeUrl);
     });
+  });
 
-    // BUTTON TO OPEN RECIPE INSTRUCTION IN NEW PAGE on index.html
+  // BUTTON TO SHOW INGREDIENTS on index.html
 
-    $(document).on("click", "#link", function () {
-        var recipeId = parseInt($(this).attr("data-id"));
+  $(document).on("click", "#info-btn", function () {
+    var recipeId = parseInt($(this).attr("data-id"));
 
-        $.ajax({
-            url: `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKeySpoonacular}&includeNutrition=false`,
-            type: "GET",
-            dataType: "json",
-        }).then(function (response) {
-            var recipeUrl = response.sourceUrl;
-            window.open(recipeUrl);
-        });
+    $.ajax({
+      url: `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKeySpoonacular}&includeNutrition=false`,
+      type: "GET",
+      dataType: "json",
+    }).then(function (response) {
+      var ingredients = [];
+      var amount = [];
+      var unit = [];
+      var list = [];
+
+      for (i = 0; i < response.extendedIngredients.length; i++) {
+        ingredients.push(response.extendedIngredients[i].name);
+        amount.push(response.extendedIngredients[i].amount);
+        unit.push(response.extendedIngredients[i].unit);
+        list.push(ingredients[i] + " " + amount[i] + "(" + unit[i] + ")");
+      }
+
+      $(`.hidden-text${recipeId}`).html("");
+      for (i = 0; i < ingredients.length; i++) {
+        $(`.hidden-text${recipeId}`).append(
+          `<li>${amount[i]} ${ingredients[i]} (${unit[i]})</li>`
+        );
+      }
     });
+  });
 
-    // BUTTON TO SHOW INGREDIENTS on index.html
+  //CART BUTTON FROM API CALL on index.html
 
-    $(document).on("click", "#info-btn", function () {
-        var recipeId = parseInt($(this).attr("data-id"));
+  $(document).on("click", "#cartButton", function () {
+    var recipeId = parseInt($(this).attr("data-id"));
+    var recipeName = $(this).attr("data-name");
+    $.ajax({
+      url: `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKeySpoonacular}&includeNutrition=false`,
+      type: "GET",
+      dataType: "json",
+    }).then(function (response) {
+      var ingredients = [];
+      var amount = [];
+      var unit = [];
 
-        $.ajax({
-            url: `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKeySpoonacular}&includeNutrition=false`,
-            type: "GET",
-            dataType: "json",
-        }).then(function (response) {
-            var ingredients = [];
-            var amount = [];
-            var unit = [];
-            var list = [];
-
-            for (i = 0; i < response.extendedIngredients.length; i++) {
-                ingredients.push(response.extendedIngredients[i].name);
-                amount.push(response.extendedIngredients[i].amount);
-                unit.push(response.extendedIngredients[i].unit);
-                list.push(ingredients[i] + " " + amount[i] + "(" + unit[i] + ")");
-            }
-
-            $(`.hidden-text${recipeId}`).html("");
-            for (i = 0; i < ingredients.length; i++) {
-                $(`.hidden-text${recipeId}`).append(
-                    `<li>${amount[i]} ${ingredients[i]} (${unit[i]})</li>`
-                );
-            }
-        });
+      for (i = 0; i < response.extendedIngredients.length; i++) {
+        ingredients.push(response.extendedIngredients[i].name);
+        amount.push(response.extendedIngredients[i].amount);
+        unit.push(response.extendedIngredients[i].unit);
+        cart.push(
+          ingredients[i] +
+          "#" +
+          amount[i] +
+          "#" +
+          "(" +
+          unit[i] +
+          ")" +
+          "#" +
+          recipeName
+        );
+      }
+      cart.sort();
+      window.localStorage.setItem("myCart", JSON.stringify(cart));
+      nbRecipesCart++;
+      window.localStorage.setItem("sizeCart", nbRecipesCart);
+      showAlert("Added to Cart!", "success");
     });
+  });
 
-    //CART BUTTON FROM API CALL on index.html
+  // CART BUTTON FOR MY RECIPES on my_recipes.html
 
-    $(document).on("click", "#cartButton", function () {
-        var recipeId = parseInt($(this).attr("data-id"));
-        var recipeName = $(this).attr("data-name");
-        $.ajax({
-            url: `https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKeySpoonacular}&includeNutrition=false`,
-            type: "GET",
-            dataType: "json",
-        }).then(function (response) {
-            var ingredients = [];
-            var amount = [];
-            var unit = [];
+  $(document).on("click", "#cartBtn", function () {
+    var recipeId = parseInt($(this).attr("data-id"));
+    var ingredientsList = myRecipes[recipeId].ing;
+    var tempIng = [];
+    for (let i = 0; i < ingredientsList.length; i++) {
+      var tempIng = ingredientsList[i] + "#" + myRecipes[recipeId].name;
+      cart.push(tempIng);
+    }
+    cart.sort();
+    window.localStorage.setItem("myCart", JSON.stringify(cart));
+    //need to fix
+    nbRecipesCart++;
+    window.localStorage.setItem("sizeCart", nbRecipesCart);
+    showAlert("Added to Cart!", "success");
+  });
 
-            for (i = 0; i < response.extendedIngredients.length; i++) {
-                ingredients.push(response.extendedIngredients[i].name);
-                amount.push(response.extendedIngredients[i].amount);
-                unit.push(response.extendedIngredients[i].unit);
-                cart.push(
-                    ingredients[i] +
-                    "#" +
-                    amount[i] +
-                    "#" +
-                    "(" +
-                    unit[i] +
-                    ")" +
-                    "#" +
-                    recipeName
-                );
-            }
-            cart.sort();
-            window.localStorage.setItem("myCart", JSON.stringify(cart));
-            nbRecipesCart++;
-            window.localStorage.setItem("sizeCart", nbRecipesCart);
-            showAlert("Added to Cart!", "success");
-        });
+  // PRE-FILTERED BUTTONS on index.html
+
+  $(document).on("click", ".filter", function () {
+    showHomeSearchBar();
+    $("#displayRecipe").html("");
+    var query = $(this).text();
+    $("header").hide();
+    $.ajax({
+      url: `https://api.spoonacular.com/recipes/search?apiKey=${apiKeySpoonacular}&query=${query}&number=9`,
+      type: "GET",
+      dataType: "json",
+    }).then(function (response) {
+
+      for (let i = 0; i < response.results.length; i++) {
+        var recipeName = response.results[i].title;
+        var recipePicture = response.results[i].image;
+        var cookTime = response.results[i].readyInMinutes;
+        var ingredientsId = response.results[i].id;
+        var servings = response.results[i].servings;
+
+        displayRecipe(
+          recipePicture,
+          recipeName,
+          cookTime,
+          servings,
+          ingredientsId
+        );
+      }
     });
+  });
 
-    // CART BUTTON FOR MY RECIPES on my_recipes.html
+  // CHECKBOX TO STRIKE ITEMS on cart.html
 
-    $(document).on("click", "#cartBtn", function () {
-        var recipeId = parseInt($(this).attr("data-id"));
-        var ingredientsList = myRecipes[recipeId].ing;
-        var tempIng = [];
-        for (let i = 0; i < ingredientsList.length; i++) {
-            var tempIng = ingredientsList[i] + "#" + myRecipes[recipeId].name;
-            cart.push(tempIng);
-        }
-        cart.sort();
-        window.localStorage.setItem("myCart", JSON.stringify(cart));
-        //need to fix
-        nbRecipesCart++;
-        window.localStorage.setItem("sizeCart", nbRecipesCart);
-        showAlert("Added to Cart!", "success");
-    });
+  $(".form-check-input").click(function () {
+    var textLine = $(this).parent().parent().parent()
+    if ($(this).prop("checked") == true) {
 
-    // PRE-FILTERED BUTTONS on index.html
-
-    $(document).on("click", ".filter", function () {
-        showHomeSearchBar();
-        $("#displayRecipe").html("");
-        var query = $(this).text();
-        $("header").hide();
-        $.ajax({
-            url: `https://api.spoonacular.com/recipes/search?apiKey=${apiKeySpoonacular}&query=${query}&number=9`,
-            type: "GET",
-            dataType: "json",
-        }).then(function (response) {
-
-            for (let i = 0; i < response.results.length; i++) {
-                var recipeName = response.results[i].title;
-                var recipePicture = response.results[i].image;
-                var cookTime = response.results[i].readyInMinutes;
-                var ingredientsId = response.results[i].id;
-                var servings = response.results[i].servings;
-
-                displayRecipe(
-                    recipePicture,
-                    recipeName,
-                    cookTime,
-                    servings,
-                    ingredientsId
-                );
-            }
-        });
-    });
-
-    // CHECKBOX TO STRIKE ITEMS on cart.html
-
-    $(".form-check-input").click(function () {
-        var textLine = $(this).parent().parent().parent()
-        if ($(this).prop("checked") == true) {
-
-            textLine.attr("class", "strike");
-        }
-        else if ($(this).prop("checked") == false) {
-            textLine.attr("class", "normal");
-        }
-    });
+      textLine.attr("class", "strike");
+    }
+    else if ($(this).prop("checked") == false) {
+      textLine.attr("class", "normal");
+    }
+  });
 });
 
 // FUNCTIONS ---------------------------------
@@ -332,7 +329,7 @@ $(document).ready(function () {
 // Function to display the recipe on the screen 
 
 function displayRecipe(pic, name, time, servings, id) {
-    $("#displayRecipe").prepend(`
+  $("#displayRecipe").prepend(`
           <div  id="recipeCard" class="card m-3" style="width: 18rem;">
             <img class="card-img-top" src="https://spoonacular.com/recipeImages/${pic}" alt="Card image cap" style="height:250px">
             <div class="card-body" style=>
@@ -358,22 +355,22 @@ function displayRecipe(pic, name, time, servings, id) {
 
 // Function to add to favorite list (need to be improved by using for loop (instead of includes), to be able to remove from favorite list by using splice)
 function addFavorite(name) {
-    if (favoriteRecipes.includes(name)) {
-    } else {
-        favoriteRecipes.push(name);
-    }
+  if (favoriteRecipes.includes(name)) {
+  } else {
+    favoriteRecipes.push(name);
+  }
 }
 
 function renderInstructions(arr) {
-    for (let i = 0; i < arr.length; i++) {
-        $("#renderInstructions").append(`<li>${arr[i]}</li>`);
-    }
+  for (let i = 0; i < arr.length; i++) {
+    $("#renderInstructions").append(`<li>${arr[i]}</li>`);
+  }
 }
 
 function renderIngredients(arr) {
-    for (let i = 0; i < arr.length; i++) {
-        $("#renderIngredients").append(`<li>${arr[i]}</li>`);
-    }
+  for (let i = 0; i < arr.length; i++) {
+    $("#renderIngredients").append(`<li>${arr[i]}</li>`);
+  }
 }
 
 //Global Vars
@@ -382,35 +379,35 @@ var arrInstructions = [];
 var displayIngredients = [];
 
 $("#addIngredients").on("click", function (e) {
-    e.preventDefault();
-    var ammountInput = $("#ammountInput").val();
-    var unitInput = $("#unitInput").val();
-    var ingredientsInput = $("#ingredientsInput").val();
-    displayIngredients.push(
-        ammountInput + " " + unitInput + " " + ingredientsInput
-    );
-    arrIngredients.push(
-        //Removed "#" and replaced with " "; make sure there is no conflict
-        ingredientsInput + " " + ammountInput + " " + "(" + unitInput + ")"
-    );
-    $("#ingredientsInput").val("");
-    $("#ammountInput").val("");
-    $("#unitInput").val("");
-    showAlert("Ingredient Added", "success");
+  e.preventDefault();
+  var ammountInput = $("#ammountInput").val();
+  var unitInput = $("#unitInput").val();
+  var ingredientsInput = $("#ingredientsInput").val();
+  displayIngredients.push(
+    ammountInput + " " + unitInput + " " + ingredientsInput
+  );
+  arrIngredients.push(
+    //Removed "#" and replaced with " "; make sure there is no conflict
+    ingredientsInput + " " + ammountInput + " " + "(" + unitInput + ")"
+  );
+  $("#ingredientsInput").val("");
+  $("#ammountInput").val("");
+  $("#unitInput").val("");
+  showAlert("Ingredient Added", "success");
 });
 
 $("#addInstructions").on("click", function (e) {
-    e.preventDefault();
-    var instructionsInput = $("#instructionsInput").val();
-    arrInstructions.push(instructionsInput);
-    $("#instructionsInput").val("");
-    showAlert("Instruction Added", "success");
+  e.preventDefault();
+  var instructionsInput = $("#instructionsInput").val();
+  arrInstructions.push(instructionsInput);
+  $("#instructionsInput").val("");
+  showAlert("Instruction Added", "success");
 });
 
 function generateRecipe(name, time, ingredients, instructions) {
-    $(
-        "#Preview"
-    ).prepend(`<div id="recipeCard" class="card m-2" style="width: 18rem;" >
+  $(
+    "#Preview"
+  ).prepend(`<div id="recipeCard" class="card m-2" style="width: 18rem;" >
             <div class="card-body">
                 <h5 class="card-title">${name}</h5>
                 <p class="card-text">Time to Cook : ${time} min</p>
@@ -420,51 +417,51 @@ function generateRecipe(name, time, ingredients, instructions) {
                 <ol id="renderInstructions" class="card-text"></ol>
             </div>
         </div>`);
-    renderInstructions(instructions);
-    renderIngredients(ingredients);
+  renderInstructions(instructions);
+  renderIngredients(ingredients);
 }
 
 //Add Notification to tell user added ingredients, instructions etc.
 var myRec = {};
 $("#previewButton").on("click", function () {
-    var recipeName = $("#recipeNameInput").val();
-    var cookTime = $("#cookTimeInput").val();
-    generateRecipe(recipeName, cookTime, displayIngredients, arrInstructions);
+  var recipeName = $("#recipeNameInput").val();
+  var cookTime = $("#cookTimeInput").val();
+  generateRecipe(recipeName, cookTime, displayIngredients, arrInstructions);
 
-    myRec.name = recipeName;
-    myRec.time = cookTime;
-    myRec.ing = arrIngredients;
-    myRec.inst = arrInstructions;
+  myRec.name = recipeName;
+  myRec.time = cookTime;
+  myRec.ing = arrIngredients;
+  myRec.inst = arrInstructions;
 
-    $("#recipeNameInput").val("");
-    $("#cookTimeInput").val("");
-    $("#formToCreateRecipe").hide()
-    $("#saveLocalStorage").show()
+  $("#recipeNameInput").val("");
+  $("#cookTimeInput").val("");
+  $("#formToCreateRecipe").hide()
+  $("#saveLocalStorage").show()
 });
 
 
 // REUSABLE FUNCTION TO SHOW A NOTIFICATION ON ACTION
 
 function showAlert(str, type) {
-    $("#alert").show();
-    $("#alert").attr("class", `alert alert-${type}`);
-    $("#alert").text(str);
-    window.setTimeout(function () {
-        $("#alert").hide();
-    }, 2000);
+  $("#alert").show();
+  $("#alert").attr("class", `alert alert-${type}`);
+  $("#alert").text(str);
+  window.setTimeout(function () {
+    $("#alert").hide();
+  }, 2000);
 }
 
 //NEWLY ADDED CODE FROM NAPO!!! 
 function hideHomeSearchBar() {
-    $("#homeSearchBar").hide();
+  $("#homeSearchBar").hide();
 }
 
 function showHomeSearchBar() {
-    $("#homeSearchBar").show();
+  $("#homeSearchBar").show();
 }
 
 $("#homePageLink").on("click", function () {
-    hideHomeSearchBar();
+  hideHomeSearchBar();
 })
 //ENDED NEW CODE FROM NAPO!!!
 
@@ -473,15 +470,15 @@ $("#homePageLink").on("click", function () {
 // BUTTON SAVE MY RECIPE on create_recipes.html
 var myRecipes = JSON.parse(window.localStorage.getItem("myRecipes")) || [];
 $("#saveLocalStorage").on("click", function () {
-    myRecipes.push(myRec);
-    window.localStorage.setItem("myRecipes", JSON.stringify(myRecipes));
-    myRec = {};
-    arrIngredients = [];
-    arrInstructions = [];
-    showAlert("Recipe saved", "success");
-    $("#Preview").html("");
-    $("#formToCreateRecipe").show()
-    $("#saveLocalStorage").hide()
+  myRecipes.push(myRec);
+  window.localStorage.setItem("myRecipes", JSON.stringify(myRecipes));
+  myRec = {};
+  arrIngredients = [];
+  arrInstructions = [];
+  showAlert("Recipe saved", "success");
+  $("#Preview").html("");
+  $("#formToCreateRecipe").show()
+  $("#saveLocalStorage").hide()
 });
 
 
